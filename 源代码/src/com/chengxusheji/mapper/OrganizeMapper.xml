@@ -1,0 +1,48 @@
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace命名空间，为了对sql语句进行隔离，方便管理，mapper开发dao方式，使用namespace有特殊作用  
+mapper代理开发时将namespace指定为mapper接口的全限定名  
+ -->
+<mapper namespace="com.chengxusheji.mapper.OrganizeMapper"> 
+<!--在mapper.xml文件中配置很多的sql语句，执行每个sql语句时，封装为MappedStatement对象 
+mapper.xml以statement为单位管理sql语句  
+ -->
+	<!-- 添加志愿组织记录 -->
+	<insert id="addOrganize" parameterType="organize">
+		insert into t_organize(organizeName,organizePhoto,makeDate,fuzheren,telephone,organizeDesc,signUpNames) values 
+		(#{organizeName},#{organizePhoto},#{makeDate},#{fuzheren},#{telephone},#{organizeDesc},#{signUpNames})
+	</insert>
+
+	<!-- 按照查询条件分页查询志愿组织记录 -->
+	<select id="queryOrganize" resultMap="organizeMap" >
+		select t_organize.* from t_organize ${where} limit #{startIndex},#{pageSize}
+	</select>
+	<resultMap id="organizeMap" type="organize">
+        <id property="organizeId" column="organizeId" />
+    </resultMap>
+
+    <!-- 按照查询条件查询所有志愿组织记录 -->
+	<select id="queryOrganizeList" resultMap="organizeMap" >
+		select t_organize.* from t_organize ${where}
+	</select>
+
+    <!-- 按照查询条件的志愿组织记录数 -->
+	<select id="queryOrganizeCount" resultType="int">
+		select count(*) from t_organize ${where}
+	</select>
+
+	<!-- 根据主键查询某个志愿组织记录 -->
+	<select id="getOrganize" parameterType="int" resultMap="organizeMap">
+		select * from t_organize where t_organize.organizeId = #{organizeId}
+	</select>
+
+	<!-- 更新志愿组织记录 -->
+	<update id="updateOrganize" parameterType="organize">
+		update t_organize set organizeName=#{organizeName},organizePhoto=#{organizePhoto},makeDate=#{makeDate},fuzheren=#{fuzheren},telephone=#{telephone},organizeDesc=#{organizeDesc},signUpNames=#{signUpNames} where organizeId = #{organizeId}
+	</update>
+
+	<!-- 删除志愿组织记录 -->
+	<delete id="deleteOrganize" parameterType="int">
+		delete from t_organize where organizeId=#{organizeId}
+	</delete>
+
+</mapper>
